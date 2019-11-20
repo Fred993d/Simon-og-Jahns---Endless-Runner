@@ -14,10 +14,10 @@ lane = 0
 point = 0
 hiddenPoint = 0
 
-baseSpeed = 25
+baseSpeed = 30
 speed = baseSpeed
 
-baseEnemyTimer = 50
+baseEnemyTimer = 25
 enemyTimer = 50
 enemies = []
 
@@ -28,12 +28,28 @@ class enemy():
         self.lane = lane
     def new_location(self):
         self.enemyx = self.enemyx - speed
+def spawnEnemy():
+    lane = int(random(1,4))
+    if lane == 1:
+        enemyy = 50
+    elif lane == 2:
+        enemyy = 150
+    elif lane == 3:
+        enemyy = 250
+    newenemy = enemy(enemyy, lane)
+    enemies.append(newenemy)
         
 def setup():
     global enemyTimer
     global point
     global speed
-    size(backgroundx, backgroundy)
+    global img
+    global player
+    global enemyPic
+    size(backgroundx,backgroundy)
+    img = loadImage("Warsong gullach.png")
+    player = loadImage("Rogueo logo.png")
+    enemyPic = loadImage("Paladino logo.png")
     enemyTimer = baseEnemyTimer
     point = 0
     speed = baseSpeed
@@ -44,37 +60,27 @@ def draw():
     global point
     global speed
     global hiddenPoint
-    background(156, 22, 26)
-    stroke(0,0,255)
-    line(backgroundx, 100, 0, 100)
-    line(backgroundx, 200, 0, 200)
+    imageMode(CORNER)
+    image(img, 0,0, backgroundx, backgroundy)
+    imageMode(CENTER)
     stroke(0)
     fill(255)
     if enemyTimer == 0:
-        lane = int(random(1,4))
-        if lane == 1:
-            enemyy = 50
-        elif lane == 2:
-            enemyy = 150
-        elif lane == 3:
-            enemyy = 250
-        newenemy = enemy(enemyy, lane)
-        enemies.append(newenemy)
-        enemyTimer = baseEnemyTimer
+        spawnEnemy()
+        spawnEnemy()
         
+        enemyTimer = baseEnemyTimer
     else:
         enemyTimer = enemyTimer - 1
     rectMode(CENTER)
     for newenemy in enemies:
-        rect(newenemy.enemyx,newenemy.enemyy,enemyside,enemyside)
+        image(enemyPic,newenemy.enemyx,newenemy.enemyy,playerR * 2,playerR * 2)
         newenemy.new_location()
-        if playerx < newenemy.enemyx + 15 and playerx > newenemy.enemyx - 15 and playerLane == newenemy.lane:
+        if playerx - playerR < newenemy.enemyx + playerR and playerx + playerR > newenemy.enemyx - playerR and playerLane == newenemy.lane:
             setup()
             
-    stroke(0,255,0)
-    fill(0,255,0)
-    ellipseMode(CENTER)
-    ellipse(playerx, playery, playerR, playerR)
+    
+    image(player,playerx,playery,playerR * 2,playerR * 2)
     
     point = point + 1
     hiddenPoint = hiddenPoint + 1
