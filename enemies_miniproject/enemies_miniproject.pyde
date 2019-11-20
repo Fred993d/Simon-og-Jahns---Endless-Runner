@@ -14,8 +14,8 @@ point = 0
 
 speed = 25
 
-enemytimer = 100
-
+baseEnemyTimer = 50
+enemyTimer = 50
 enemies = []
 
 class enemy():
@@ -26,11 +26,13 @@ class enemy():
         self.enemyx = self.enemyx - 25
         
 def setup():
+    global enemyTimer
     size(backgroundx, backgroundy)
+    enemyTimer = baseEnemyTimer
     
 def draw():
     global enemyy
-    global enemytimer
+    global enemyTimer
     global point
     background(156, 22, 26)
     stroke(0,0,255)
@@ -38,7 +40,7 @@ def draw():
     line(backgroundx, 200, 0, 200)
     stroke(0)
     fill(255)
-    if enemytimer == 0:
+    if enemyTimer == 0:
         lane = int(random(1,4))
         if lane == 1:
             enemyy = 50
@@ -46,12 +48,12 @@ def draw():
             enemyy = 150
         elif lane == 3:
             enemyy = 250
-        print(lane)
         newenemy = enemy(enemyy)
         enemies.append(newenemy)
-        enemytimer = 100
+        enemyTimer = baseEnemyTimer
+        
     else:
-        enemytimer = enemytimer - 1
+        enemyTimer = enemyTimer - 1
     rectMode(CENTER)
     for newenemy in enemies:
         rect(newenemy.enemyx,newenemy.enemyy,enemyside,enemyside)
